@@ -1,0 +1,156 @@
+/*********************************************
+ * OPL 12.10.0.0 Model
+ * Author: Greatmar2
+ * Creation Date: Mar 4, 2020 at 1:16:53 PM
+ *********************************************/
+
+// Parameters
+int numStores = ...;
+int numHorses = ...;
+int numTrailers = ...;
+
+range locations = 0..numStores+1;
+range stores = 1..numStores;
+/*
+range stores = 1..numStores;
+range locations = stores;
+execute ADD {
+  locations.add(0);
+  locations.add(numStores+1);
+}
+*/
+range horses = 1..numHorses;
+range trailers = 1..numTrailers;
+
+float distances[locations][locations] = ...;
+float times[locations][locations] = ...;
+float distanceCost[horses] = ...;
+float timeCost[horses] = ...;
+int palletCapacity[trailers] = ...;
+int horseTrailerCompatability[horses][trailers] = ...;
+int horseStoreCompatability[horses][stores] = ...;
+int trailerStoreCompatability[trailers][stores] = ...;
+int demand[stores] = ...;
+float windowStart[locations] = ...;
+float windowEnd[locations] = ...;
+float averageUnloadTime[locations] = ...;
+
+float travelTimeConst[locations][locations];
+
+
+//Variables
+dvar boolean travel[locations][locations][horses];
+dvar int deliveries[locations][trailers];
+dvar boolean vehicles[horses][trailers];
+dvar float serviceStart[locations][horses];
+
+
+//Objective function
+minimize
+  sum(i in locations, j in locations, k in horses) (travel[i][j][k] * ((distanceCost[k] * distances[i][j]) + 
+  	(timeCost[k] * (serviceStart[j][k] - serviceStart[i][k]))));
+
+
+//Constraints
+subject to {
+  forall (j in stores)
+    // Meet Store's demand 
+  	ctDemand:
+  		sum(l in trailers) deliveries[j][l] == demand[j];
+  forall (l in trailers) {
+    // Account for how many pallets must be loaded at depot
+    ctLoad:
+    	deliveries[0][l] == sum(j in stores) deliveries[j][l];
+    // Prevent vehicles from delivering more than their maximum capacity (and only allow vehicles with a horse and trailer to deliver)
+    ctCapacity:
+    	deliveries[0][l] <= palletCapacity[l] * sum(k in horses) vehicles[k][l];
+    // Only allow horses to be paired with compatable trailers
+    forall (k in horses)
+      ctVehicleCompat:
+      	vehicles[k][l] <= horseTrailerCompatability[k][l]; 
+    // Only allow horses to be assigned to one or less trailers
+    ctVehicles:
+    	sum(k in horses) vehicles[k][l] <= 1;
+    // Only allow vehicles to deliver to stores if both the trailer and horse are compatable with the store
+    forall (j in stores)
+      ctStoreCompat:
+      	deliveries[j][l] <= palletCapacity[l] * trailerStoreCompatability[j][l] * sum(k in horses) (vehicles[k][l] * horseStoreCompatability[j][k]);
+   }
+  forall (k in horses) {
+    // Make sure paired vehicles leave the depot
+    // TODO Check whether the sums will sum over one another
+    ctLeave:
+    	sum(j in stores) (travel[0][j][k]) - sum(l in trailers) (vehicles[k][l]) == 0;
+    // Make sure paired vehicles return
+    ctReturn:
+    	sum(i in stores) (travel[i][numStores+1][k]) - sum(l in trailers) (vehicles[k][l]) == 0;
+    // Make sure that vehicles leave stores that they arrive at
+    forall(j in stores)
+    	ctMove:
+    		sum(i in locations: i != j) (travel[i][j][k]) - sum(i in locations) (travel[j][i][k]) == 0;
+    // Only start unloading during store windows
+    forall(j in locations) {
+      ctWindowStart:
+      	windowStart[j] <= serviceStart[j][k];
+      ctWindowEnd:
+      	serviceStart[j][k] <= windowEnd[j];
+      // Account for the time a vehicle takes to unload at and travel from the previous store
+      forall(i in locations) 
+      	serviceStart[i][k] + sum(l in trailers) (vehicles[k][l] * deliveries[i][l] * averageUnloadTime[i]) + times[i][j] - windowEnd[j] <= 
+      		(1 - travel[i][j][k]) * travelTimeConst[i][j];
+    }
+  }
+}
+
+
+//Post processing
+
+
+
+/*********************************************
+ * OPL 12.10.0.0 Data
+ * Author: Greatmar2
+ * Creation Date: Mar 4, 2020 at 1:16:53 PM
+ *********************************************/
+ 
+//Open the parameter & output sheet
+ SheetConnection sheet("ExactModelData.xlsx");
+ 
+ numHorses from SheetRead(sheet, "1D!M1");
+ numTrailers from SheetRead(sheet, "1D!M2");
+ numStores from SheetRead(sheet, "1D!M3");
+
+// Indexing arrays
+// locations from SheetRead(sheet, "1D!F2:F"+(numStores+3));
+// stores from SheetRead(sheet, "1D!F3:F"+(numStores+2));
+// horses from SheetRead(sheet, "1D!A2:A"+(numHorses+1));
+// trailers from SheetRead(sheet, "1D!D2:D"+(numTrailers+1));
+ 
+// locations from SheetRead(sheet, "1D!F2:F9");
+// stores from SheetRead(sheet, "1D!F3:F8");
+// horses from SheetRead(sheet, "1D!A2:A6");
+// trailers from SheetRead(sheet, "1D!D2:D6");
+ 
+// 1D parameters
+// distanceCost from SheetRead(sheet, "1D!B2:B"+(numHorses+1));
+// timeCost from SheetRead(sheet, "1D!C2:C"+(numHorses+1));
+// palletCapacity from SheetRead(sheet, "1D!E2:E"+(numTrailers+1));
+// demand from SheetRead(sheet, "1D!G3:G"+(numStores+2));
+// windowStart from SheetRead(sheet, "1D!H2:H"+(numStores+3));
+// windowEnd from SheetRead(sheet, "1D!I2:I"+(numStores+3));
+// averageUnloadTime from SheetRead(sheet, "1D!J2:J"+(numStores+3));
+ 
+ distanceCost from SheetRead(sheet, "1D!B2:B6");
+ timeCost from SheetRead(sheet, "1D!C2:C6");
+ palletCapacity from SheetRead(sheet, "1D!E2:E6");
+ demand from SheetRead(sheet, "1D!G3:G8");
+ windowStart from SheetRead(sheet, "1D!H2:H9");
+ windowEnd from SheetRead(sheet, "1D!I2:I9");
+ averageUnloadTime from SheetRead(sheet, "1D!J2:J9");
+
+// 2D parameters  
+ distances from SheetRead(sheet, "Distances!A1:H8");
+ times from SheetRead(sheet, "Times!A1:H8");
+ horseTrailerCompatability from SheetRead(sheet, "HorseTrailer!A1:E5");
+ horseStoreCompatability from SheetRead(sheet, "HorseStore!A1:F5");
+ trailerStoreCompatability from SheetRead(sheet, "TrailerStore!A1:F5");
