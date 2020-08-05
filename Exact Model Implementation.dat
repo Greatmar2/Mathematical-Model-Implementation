@@ -6,42 +6,25 @@
  
 //Open the parameter & output sheet
  SheetConnection sheet("ExactModelData.xlsx");
- 
-// numHorses from SheetRead(sheet, "1D!M1");
-// numTrailers from SheetRead(sheet, "1D!M2");
-// numStores from SheetRead(sheet, "1D!M3");
 
 // Indexing arrays
-// locations from SheetRead(sheet, "1D!F2:F"+(numStores+3));
-// stores from SheetRead(sheet, "1D!F3:F"+(numStores+2));
-// horses from SheetRead(sheet, "1D!A2:A"+(numHorses+1));
-// trailers from SheetRead(sheet, "1D!D2:D"+(numTrailers+1));
- 
- locations from SheetRead(sheet, "1D!F2:F9");
- stores from SheetRead(sheet, "1D!F3:F8");
- horses from SheetRead(sheet, "1D!A2:A6");
- trailers from SheetRead(sheet, "1D!D2:D6");
+ locations from SheetRead(sheet, "Locations");
+ stores from SheetRead(sheet, "Stores");
+ horses from SheetRead(sheet, "Horses");
+ trailers from SheetRead(sheet, "Trailers");
  
 // 1D parameters
-// distanceCost from SheetRead(sheet, "1D!B2:B"+(numHorses+1));
-// timeCost from SheetRead(sheet, "1D!C2:C"+(numHorses+1));
-// palletCapacity from SheetRead(sheet, "1D!E2:E"+(numTrailers+1));
-// demand from SheetRead(sheet, "1D!G3:G"+(numStores+2));
-// windowStart from SheetRead(sheet, "1D!H2:H"+(numStores+3));
-// windowEnd from SheetRead(sheet, "1D!I2:I"+(numStores+3));
-// averageUnloadTime from SheetRead(sheet, "1D!J2:J"+(numStores+3));
- 
- distanceCost from SheetRead(sheet, "1D!B2:B6");
- timeCost from SheetRead(sheet, "1D!C2:C6");
- palletCapacity from SheetRead(sheet, "1D!E2:E6");
- demand from SheetRead(sheet, "1D!G2:G9");
- windowStart from SheetRead(sheet, "1D!H2:H9");
- windowEnd from SheetRead(sheet, "1D!I2:I9");
- averageUnloadTime from SheetRead(sheet, "1D!J2:J9");
+ distanceCost from SheetRead(sheet, "DistanceCost");
+ timeCost from SheetRead(sheet, "TimeCost");
+ palletCapacity from SheetRead(sheet, "PalletCapacity");
+ demand from SheetRead(sheet, "Demand");
+ windowStart from SheetRead(sheet, "WindowStart");
+ windowEnd from SheetRead(sheet, "WindowEnd");
+ averageUnloadTime from SheetRead(sheet, "AverageUnload");
 
-// 2D parameters  
- distances from SheetRead(sheet, "Distances!A1:H8");
- times from SheetRead(sheet, "Times!A1:H8");
- horseTrailerCompatability from SheetRead(sheet, "HorseTrailer!A1:E5");
- storeHorseCompatability from SheetRead(sheet, "HorseStore!A1:F5");
- storeTrailerCompatability from SheetRead(sheet, "TrailerStore!A1:F5");
+// 2D parameters
+ distances from SheetRead(sheet, "Distances");
+ times from SheetRead(sheet, "Times");
+ horseTrailerCompatability from SheetRead(sheet, "HorseTrailer");
+ storeHorseCompatability from SheetRead(sheet, "HorseStore");
+ storeTrailerCompatability from SheetRead(sheet, "TrailerStore");

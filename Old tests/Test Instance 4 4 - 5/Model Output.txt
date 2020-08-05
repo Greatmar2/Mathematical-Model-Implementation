@@ -1,0 +1,24 @@
+Data:
+
+Horse SP1 is paired with trailer C 1, with capacity 17
+Horse SP1 travels from Depot to 4 to deliver 0 pallets. Expected unload start time is 10
+Horse SP1 travels from 2 to DepotReturn to deliver 0 pallets. Expected unload start time is 16.444533958
+Horse SP1 travels from 4 to 2 to deliver 1 pallets. Expected unload start time is 15.05622903
+
+Horse SP2 is paired with trailer C 2, with capacity 17
+Horse SP2 travels from Depot to 4 to deliver 5 pallets. Expected unload start time is 9.658488986
+Horse SP2 travels from 2 to DepotReturn to deliver 0 pallets. Expected unload start time is 16.255752625
+Horse SP2 travels from 4 to 2 to deliver 0 pallets. Expected unload start time is 15
+
+Horse SP3 is paired with trailer C 4, with capacity 23
+Horse SP3 travels from Depot to 4 to deliver 0 pallets. Expected unload start time is 10
+Horse SP3 travels from 2 to 3 to deliver 11 pallets. Expected unload start time is 16.608644485
+Horse SP3 travels from 3 to DepotReturn to deliver 0 pallets. Expected unload start time is 18.701138859
+Horse SP3 travels from 4 to 2 to deliver 0 pallets. Expected unload start time is 15.05622903
+
+Horse SP4 is paired with trailer C 2, with capacity 17
+Horse SP4 travels from Depot to 4 to deliver 4 pallets. Expected unload start time is 10
+Horse SP4 travels from 2 to DepotReturn to deliver 0 pallets. Expected unload start time is 16.540207242
+Horse SP4 travels from 4 to 2 to deliver 0 pallets. Expected unload start time is 15.284454617
+
+Solve time: 330

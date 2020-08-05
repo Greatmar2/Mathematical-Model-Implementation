@@ -43,6 +43,8 @@ float travelTimeConstMatrix[locations][locations];
 float travelTimeConst = 24;
 //travelTimeConst = max(i in windowEnd) - min(j in windowStart);
 
+float beforeTime;
+
 //Preprocessing
 execute {
 	for (var i in locations) {
@@ -50,6 +52,8 @@ execute {
 	    travelTimeConstMatrix[i][j] = windowEnd[i] + (demand[i] * averageUnloadTime[i]) + times[i][i] - windowStart[j];
 	  }
 	}
+	
+	beforeTime = (new Date()).getTime();
 }
 
 //Variables
@@ -62,31 +66,28 @@ dvar float+ travelTime[locations][locations][horses];
 
 //Objective function
 minimize
-//  sum(i in locations, j in locations, k in horses) (travel[i][j][k] * ((distanceCost[k] * distances[i][j]) + 
-//  	(travel[i][j][k] * timeCost[k] * (serviceStart[j][k] - serviceStart[i][k]))));
-//  sum(i in locations, j in locations, k in horses) (travel[i][j][k] * distanceCost[k] * distances[i][j]);
 	sum(i in locations, j in locations, k in horses) ((travel[i][j][k] * distanceCost[k] * distances[i][j]) + 
   		travelTime[i][j][k]);
 
 
 //Constraints
 subject to {
-//  forall(i in locations, j in locations, k in horses)
-//    ctTravelBool:
-//    	travel[i][j][k] in {0, 1};
   forall (j in stores)
     // Meet Store's demand 
   	ctDemand:
-  		sum(k in horses) deliveries[j][k] == demand[j];
-//  forall (l in trailers) {
+  		sum(k in horses) (deliveries[j][k]) == demand[j];
+  forall (l in trailers)
+    ctVehiclesTrailer:
+    	sum(k in horses) (vehicles[k][l]) <= 1;
   forall (k in horses) {
     // Account for how many pallets must be loaded at depot
     ctLoad:
-    	deliveries["Depot"][k] == sum(j in stores) deliveries[j][k];
+    	deliveries["Depot"][k] == sum(j in stores) (deliveries[j][k]);
     // Trailers must not "deliver" any pallets to the depot
     ctReturnEmpty:
     	deliveries["DepotReturn"][k] == 0; 
-    // Prevent vehicles from delivering more than their maximum capacity (and only allow vehicles with a horse and trailer to deliver)
+    // Prevent vehicles from delivering more than their maximum capacity 
+    // (and only allow vehicles with a horse and trailer to deliver)
     ctCapacity:
     	deliveries["Depot"][k] <= sum(l in trailers) (palletCapacity[l]* vehicles[k][l]);
     // Only allow horses to be paired with compatable trailers
@@ -94,27 +95,19 @@ subject to {
       ctVehicleCompat:
       	vehicles[k][l] <= horseTrailerCompatability[k][l]; 
     // Only allow horses to be assigned to one or less trailers
-    ctVehicles:
-    	sum(l in trailers) vehicles[k][l] <= 1;
-    forall (j in stores) {
+    ctVehiclesHorses:
+    	sum(l in trailers) (vehicles[k][l]) <= 1;
+    forall (j in stores) 
       // Only allow vehicles to deliver to stores if both the trailer and horse are compatable with the store
       ctStoreCompat:
-      	deliveries[j][k] <= demand[j] * sum(i in locations) (travel[i][j][k]) * storeHorseCompatability[j][k] * sum(l in trailers) (vehicles[k][l] * storeTrailerCompatability[j][l]);
-	  //Make sure deliveries are >= 0
-//	  ctPositive:
-//	 	deliveries[j][k] >= 0;
-    }
-//  }   
-//  forall (k in horses) {
-    // Make sure paired vehicles leave the depot
+      	deliveries[j][k] <= demand[j] * sum(i in locations) (travel[i][j][k]) * storeHorseCompatability[j][k] * 
+      	  sum(l in trailers) (vehicles[k][l] * storeTrailerCompatability[j][l]);
     ctLeave:
-//    	sum(j in locations: j != "Depot") (travel["Depot"][j][k]) - sum(l in trailers) (vehicles[k][l]) == 0;
     	sum(j in stores) (travel["Depot"][j][k]) - sum(l in trailers) (vehicles[k][l]) == 0;
     ctNoReturn: 
     	sum(i in locations) (travel[i]["Depot"][k]) == 0;
     // Make sure paired vehicles return
     ctReturn:
-//    	sum(i in locations: i != "DepotReturn") (travel[i]["DepotReturn"][k]) - sum(l in trailers) (vehicles[k][l]) == 0;
     	sum(i in stores) (travel[i]["DepotReturn"][k]) - sum(l in trailers) (vehicles[k][l]) == 0;
     ctNoLeave: 
     	sum(j in locations) (travel["DepotReturn"][j][k]) == 0;
@@ -126,19 +119,13 @@ subject to {
       // Only start unloading during store windows
       ctWindowStart:
       	windowStart[j] <= serviceStart[j][k];
-//      	windowStart[j] * (sum(i in locations) travel[i][j][k]) <= serviceStart[j][k];
       ctWindowEnd:
       	serviceStart[j][k] <= windowEnd[j];
-//      	serviceStart[j][k] <= windowEnd[j] * (sum(i in locations) travel[i][j][k]);
       forall(i in locations) {
         // Account for the time a vehicle takes to unload at and travel from the previous store
         ctWindowTravelTime:
 	      	serviceStart[i][k] + (deliveries[i][k] * averageUnloadTime[i]) + times[i][j] <=  
 	      		serviceStart[j][k] + ((1 - travel[i][j][k]) * travelTimeConstMatrix[i][j]);
-//	      	serviceStart[i][k] + (deliveries[i][k] * averageUnloadTime[i]) + times[i][j] - windowEnd[j] <= 
-//	      		(1 - travel[i][j][k]) * travelTimeConstMatrix[i][j];
-//	      	serviceStart[i][k] + sum(l in trailers) (deliveries[i][l] * averageUnloadTime[i]) + times[i][j] - windowEnd[j] <= 
-//	      		(1 - travel[i][j][k]) * travelTimeConstMatrix[i][j];
 	     // Travel time matrix must either be difference between unload start times or zero
       	ctTravelTimeLess:
       		travelTime[i][j][k] <= abs(serviceStart[j][k] - serviceStart[i][k]);
@@ -146,8 +133,6 @@ subject to {
       		travelTime[i][j][k] >= serviceStart[j][k] - serviceStart[i][k] - (24*(1-travel[i][j][k]));
       	ctTravelTimeFloor:
       		travelTime[i][j][k] <= travelTimeConst*travel[i][j][k];
-//      	ctTravelTimeNonnegative:
-//      		travelTime[i][j][k] >= 0;
       }      		
     }
   }
@@ -156,13 +141,43 @@ subject to {
 
 //Post processing
 execute {
+  var afterTime = (new Date()).getTime();
+  
   var outputFile = new IloOplOutputFile("Model Output.txt");
-  outputFile.writeln("Data:");
+  
+  //Input
+  outputFile.writeln("Input:");
+  for(var i in stores) {
+//    outputFile.writeln("");
+    outputFile.writeln("Store " + i + " has " + demand[i] + " pallets demand and window " + windowStart[i] + "-" + windowEnd[i])
+	for(var k in horses) {
+	  if (storeHorseCompatability[i][k] == 0) {
+	    outputFile.writeln("- Horse " + k + " is incompatible with store " + i);
+	  }
+	}
+	for(var l in trailers) {
+	  if (storeTrailerCompatability[i][l] == 0) {
+	    outputFile.writeln("- Trailer " + l + " is incompatible with store " + i);
+	  }
+	}
+  }
+  outputFile.writeln("");
+  for(var k in horses) {
+	for(var l in trailers) {
+	  if (horseTrailerCompatability[k][l] == 0) {
+    	outputFile.writeln("- Horse " + k + " is incompatible with trailer " + l);
+	  }
+	}      
+  }
+  outputFile.writeln("");
+  
+  //Output
+  outputFile.writeln("Output:");
   for(var k in horses) {
     for (var l in trailers) {
       if (vehicles[k][l] == 1) {
         outputFile.writeln("");
-        outputFile.writeln("Horse " + k + " is paired with trailer " + l + ", with capacity " + palletCapacity[l]);
+        outputFile.writeln("Horse " + k + " is paired with trailer " + l + ", which has capacity " + palletCapacity[l]);
       }
     }
     for (var i in locations) {
@@ -182,6 +197,10 @@ execute {
 //        outputFile.writeln("Trailer " + l + " carries " + deliveries[j][l] + " pallets for " + j);
 //      }
 //    }     
-//  }        
+//  }
+  
+  outputFile.writeln("");
+  outputFile.writeln("Solve time: " + (afterTime-beforeTime))
+        
   outputFile.close();
 }
