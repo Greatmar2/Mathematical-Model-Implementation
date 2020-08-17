@@ -1,0 +1,23 @@
+Input:
+Customer 1 has 2 pallets demand and window 0-24 at (-68.13687163, 59.6068198) and average unload time 0.127431425
+Customer 2 has 11 pallets demand and window 0-24 at (60.54825313, 99.24602286) and average unload time 0.039818204
+Customer 3 has 10 pallets demand and window 0-24 at (35.78590143, -77.6849652) and average unload time 0.153234792
+Customer 4 has 3 pallets demand and window 0-24 at (70.04589453, 15.9523113) and average unload time 0.037866542
+Customer 5 has 8 pallets demand and window 19-20 at (33.3481069, 14.05313365) and average unload time 0.03816204
+Customer 6 has 9 pallets demand and window 6-7 at (57.96205939, -32.10840665) and average unload time 0.077229697
+Vehicle SP1 is a 11 metre with capacity 30, distance cost 1.490518544, and time cost 9.918336825
+Vehicle SP2 is a 8 metre with capacity 22, distance cost 1.000353811, and time cost 13.35493444
+Vehicle SP3 is a 8 metre with capacity 22, distance cost 1.000353811, and time cost 13.35493444
+
+Output:
+Vehicle SP2 travels from Depot to 1 to deliver 2 pallets. Expected unload start time is 15.506116843
+Vehicle SP2 travels from 1 to 2 to deliver 11 pallets. Expected unload start time is 17.444128146
+Vehicle SP2 travels from 2 to 5 to deliver 8 pallets. Expected unload start time is 19
+Vehicle SP2 travels from 5 to DepotReturn to deliver 0 pallets. Expected unload start time is 19.757648991
+Vehicle SP3 travels from Depot to 4 to deliver 3 pallets. Expected unload start time is 5.266943496
+Vehicle SP3 travels from 3 to DepotReturn to deliver 0 pallets. Expected unload start time is 9.930121941
+Vehicle SP3 travels from 4 to 6 to deliver 9 pallets. Expected unload start time is 6
+Vehicle SP3 travels from 6 to 3 to deliver 10 pallets. Expected unload start time is 7.328634141
+
+Objective value: 623.601215521
+Solve time: 393

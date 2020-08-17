@@ -13,12 +13,12 @@
 
 // Indexing arrays
 // locations from SheetRead(sheet, "1D!F2:F"+(numStores+3));
-// stores from SheetRead(sheet, "1D!F3:F"+(numStores+2));
+// customers from SheetRead(sheet, "1D!F3:F"+(numStores+2));
 // horses from SheetRead(sheet, "1D!A2:A"+(numHorses+1));
 // trailers from SheetRead(sheet, "1D!D2:D"+(numTrailers+1));
  
  locations from SheetRead(sheet, "1D!F2:F9");
- stores from SheetRead(sheet, "1D!F3:F8");
+ customers from SheetRead(sheet, "1D!F3:F8");
  horses from SheetRead(sheet, "1D!A2:A6");
  trailers from SheetRead(sheet, "1D!D2:D6");
  
@@ -43,5 +43,5 @@
  distances from SheetRead(sheet, "Distances!A1:H8");
  times from SheetRead(sheet, "Times!A1:H8");
  horseTrailerCompatability from SheetRead(sheet, "HorseTrailer!A1:E5");
- storeHorseCompatability from SheetRead(sheet, "HorseStore!A1:F5");
- storeTrailerCompatability from SheetRead(sheet, "TrailerStore!A1:F5");
+ customerHorseCompatability from SheetRead(sheet, "HorseStore!A1:F5");
+ customerTrailerCompatability from SheetRead(sheet, "TrailerStore!A1:F5");

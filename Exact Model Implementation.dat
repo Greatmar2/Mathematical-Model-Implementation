@@ -9,11 +9,15 @@
 
 // Indexing arrays
  locations from SheetRead(sheet, "Locations");
- stores from SheetRead(sheet, "Stores");
- horses from SheetRead(sheet, "Horses");
- trailers from SheetRead(sheet, "Trailers");
+ customers from SheetRead(sheet, "Stores");
+ vehicles from SheetRead(sheet, "Vehicles");
+// horses from SheetRead(sheet, "Horses");
+// trailers from SheetRead(sheet, "Trailers");
  
 // 1D parameters
+ coordinatesX from SheetRead(sheet, "CoordinatesX");
+ coordinatesY from SheetRead(sheet, "CoordinatesY");
+ vehicleTypes from SheetRead(sheet, "VehicleTypes");
  distanceCost from SheetRead(sheet, "DistanceCost");
  timeCost from SheetRead(sheet, "TimeCost");
  palletCapacity from SheetRead(sheet, "PalletCapacity");
@@ -25,6 +29,6 @@
 // 2D parameters
  distances from SheetRead(sheet, "Distances");
  times from SheetRead(sheet, "Times");
- horseTrailerCompatability from SheetRead(sheet, "HorseTrailer");
- storeHorseCompatability from SheetRead(sheet, "HorseStore");
- storeTrailerCompatability from SheetRead(sheet, "TrailerStore");
+// horseTrailerCompatability from SheetRead(sheet, "HorseTrailer");
+// customerHorseCompatability from SheetRead(sheet, "HorseStore");
+// customerTrailerCompatability from SheetRead(sheet, "TrailerStore");
