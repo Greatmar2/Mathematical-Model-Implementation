@@ -63,6 +63,10 @@ execute {
 	beforeTime = (new Date()).getTime();
 }
 
+//execute PARAMS {
+//  cplex.nodefileind = 3;
+//}
+
 //Variables
 dvar boolean travel[locations][locations][vehicles];
 dvar int+ deliveries[locations][vehicles];
@@ -86,7 +90,7 @@ subject to {
     // Account for how many pallets must be loaded at depot
     ctLoad:
     	deliveries["Depot"][k] == sum(j in customers) (deliveries[j][k]);
-    // Trailers must not "deliver" any pallets to the depot
+    // Vehicles must not "deliver" any pallets to the depot
     ctReturnEmpty:
     	deliveries["DepotReturn"][k] == 0; 
     // Vehicles must leave the depot if they are assigned to serve customers
@@ -106,6 +110,9 @@ subject to {
     	sum(j in locations) (travel["DepotReturn"][j][k]) == 0;
     // Make sure that vehicles leave customers that they arrive at
     forall(j in customers) {
+	    // Vehicles should not visit customers if they do not deliver
+	    ctNoEmptyDelivery:
+	    	sum(i in locations) travel[i][j][k] <= deliveries[j][k];
     	// Only service customer j with vehicle k if vehicle k travels to customer j, and only serve at most the vehicle capacity
     	restrictService: 
     		deliveries[j][k] <= palletCapacity[k] * sum(i in locations) travel[i][j][k];

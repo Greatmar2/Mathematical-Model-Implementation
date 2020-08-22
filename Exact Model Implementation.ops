@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<settings version="2"/>
+<settings version="2">
+  <category name="cplex">
+    <setting name="workmem" value="4096.0"/>
+    <setting name="workdir" value="C:\Users\great\Documents\CPLEX"/>
+  </category>
+</settings>
