@@ -52,7 +52,7 @@ float beforeTime;
 execute {
 	for (var i in locations) {
 	  for (var j in locations) {
-	    travelTimeConstMatrix[i][j] = windowEnd[i] + (demand[i] * averageUnloadTime[i]) + times[i][i] - windowStart[j];
+	    travelTimeConstMatrix[i][j] = Math.max(windowEnd[i] + (demand[i] * averageUnloadTime[i]) + times[i][j] - windowStart[j], 0);
 	  }
 	}
 	
@@ -77,7 +77,7 @@ dvar float+ travelTime[locations][locations][vehicles];
 //Objective function
 minimize
 	sum(i in locations, j in locations, k in vehicles) ((travel[i][j][k] * distanceCost[k] * distances[i][j]) + 
-  		travelTime[i][j][k]);
+  		(timeCost[k] * travelTime[i][j][k]));
 
 
 //Constraints
@@ -95,7 +95,7 @@ subject to {
     	deliveries["DepotReturn"][k] == 0; 
     // Vehicles must leave the depot if they are assigned to serve customers
     ctDepart:
-    	deliveries["Depot"][k] <= palletCapacity[k] * sum(j in customers) travel["Depot"][j][k];
+    	deliveries["Depot"][k] <= palletCapacity[k] * sum(j in customers) (travel["Depot"][j][k]);
     // Make sure vehicles that leave the depot return to the depot
     ctReturn:
     	sum(j in customers) (travel["Depot"][j][k]) - sum(i in customers) (travel[i]["DepotReturn"][k]) == 0;
@@ -110,9 +110,6 @@ subject to {
     	sum(j in locations) (travel["DepotReturn"][j][k]) == 0;
     // Make sure that vehicles leave customers that they arrive at
     forall(j in customers) {
-	    // Vehicles should not visit customers if they do not deliver
-	    ctNoEmptyDelivery:
-	    	sum(i in locations) travel[i][j][k] <= deliveries[j][k];
     	// Only service customer j with vehicle k if vehicle k travels to customer j, and only serve at most the vehicle capacity
     	restrictService: 
     		deliveries[j][k] <= palletCapacity[k] * sum(i in locations) travel[i][j][k];
