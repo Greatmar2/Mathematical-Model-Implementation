@@ -1,0 +1,44 @@
+"Input:
+Customer 1 has 1 pallets demand and window 0-24 at (11.74269534, 97.174211713) and average unload time 0.092376452
+Customer 2 has 2 pallets demand and window 0-24 at (49.619336127, 45.78955586) and average unload time 0.159758466
+Customer 3 has 1 pallets demand and window 16-17 at (-14.263268499, 10.27022715) and average unload time 0.03402569
+Customer 4 has 4 pallets demand and window 0-24 at (80.047523927, -93.035001956) and average unload time 0.083132509
+Customer 5 has 6 pallets demand and window 0-24 at (17.273142416, -73.660639972) and average unload time 0.136755768
+Customer 6 has 2 pallets demand and window 0-24 at (-67.831695807, 38.723595112) and average unload time 0.133718897
+Customer 7 has 1 pallets demand and window 22-23 at (55.277303874, -74.959563365) and average unload time 0.0673038
+Customer 8 has 1 pallets demand and window 10-11 at (-42.135498399, -20.280467435) and average unload time 0.058418902
+Customer 9 has 5 pallets demand and window 0-24 at (15.990401643, -71.218628165) and average unload time 0.123996035
+Customer 10 has 1 pallets demand and window 0-24 at (-70.492827703, 7.806704866) and average unload time 0.10572931
+Customer 11 has 6 pallets demand and window 0-24 at (93.827030908, -5.584451947) and average unload time 0.018680153
+Customer 12 has 2 pallets demand and window 13-14 at (5.89597624, -90.334370924) and average unload time 0.09622074
+Vehicle SP1 is a 11 metre with capacity 30, distance cost 1.383367923, and time cost 9.35590756
+Vehicle SP2 is a 8 metre with capacity 22, distance cost 1.493384419, and time cost 13.662892009
+Vehicle SP3 is a 11 metre with capacity 30, distance cost 1.383367923, and time cost 9.35590756
+
+Output:
+Vehicle SP1 travels from Depot to 8 to deliver 1 pallets. Expected unload start time is 11
+Vehicle SP1 travels from 1 to 2 to deliver 2 pallets. Expected unload start time is 14.76681858
+Vehicle SP1 travels from 2 to 3 to deliver 1 pallets. Expected unload start time is 16
+Vehicle SP1 travels from 3 to DepotReturn to deliver 0 pallets. Expected unload start time is 16.253726621
+Vehicle SP1 travels from 6 to 1 to deliver 1 pallets. Expected unload start time is 13.552570261
+Vehicle SP1 travels from 8 to 10 to deliver 1 pallets. Expected unload start time is 11.557328239
+Vehicle SP1 travels from 10 to 6 to deliver 2 pallets. Expected unload start time is 12.05094762
+Vehicle SP3 travels from Depot to 12 to deliver 2 pallets. Expected unload start time is 14
+Vehicle SP3 travels from 4 to 11 to deliver 6 pallets. Expected unload start time is 23.889753559
+Vehicle SP3 travels from 5 to 7 to deliver 1 pallets. Expected unload start time is 22
+Vehicle SP3 travels from 7 to 4 to deliver 4 pallets. Expected unload start time is 22.450604694
+Vehicle SP3 travels from 9 to 5 to deliver 6 pallets. Expected unload start time is 20.704135984
+Vehicle SP3 travels from 11 to DepotReturn to deliver 0 pallets. Expected unload start time is 25.176747893
+Vehicle SP3 travels from 12 to 9 to deliver 5 pallets. Expected unload start time is 14.462658131
+
+Objective value: 1189.40477706
+Solve time: 43398"	
+
+{"0": [[[8, 1], [10, 1], [6, 2], [1, 1], [2, 2], [3, 1]], [[12, 2], [9, 5], [5, 6], [7, 1], [4, 4], [11, 6]]], "1": []}
+
+11 metre (capacity 30):
+9 (5) -> 5 (6) -> 12 (2) -> 7 (1) -> 4 (4) -> 11 (6)
+8 (1) -> 10 (1) -> 6 (2) -> 1 (1) -> 2 (2) -> 3 (1)
+8 metre (capacity 22):
+
+{"0": [[[9, 5], [5, 6], [12, 2], [7, 1], [4, 4], [11, 6]], [[8, 1], [10, 1], [6, 2], [1, 1], [2, 2], [3, 1]]], "1": [[]]}

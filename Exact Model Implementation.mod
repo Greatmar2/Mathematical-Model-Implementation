@@ -42,7 +42,7 @@ float windowEnd[locations] = ...;
 float averageUnloadTime[locations] = ...;
 
 float travelTimeConstMatrix[locations][locations];
-float travelTimeConst = 24;
+float travelTimeConst = 32;
 //int vehicleCount = 0;
 //travelTimeConst = max(i in windowEnd) - min(j in windowStart);
 
@@ -111,7 +111,7 @@ subject to {
     // Make sure that vehicles leave customers that they arrive at
     forall(j in customers) {
     	// Only service customer j with vehicle k if vehicle k travels to customer j, and only serve at most the vehicle capacity
-    	restrictService: 
+    	ctRestrictService: 
     		deliveries[j][k] <= palletCapacity[k] * sum(i in locations) travel[i][j][k];
     	// Vehicles should depart from customers as many times as it arrives at them
     	ctTravel:

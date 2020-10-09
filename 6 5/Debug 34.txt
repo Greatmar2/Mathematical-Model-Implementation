@@ -1,0 +1,27 @@
+Line 34 
+"Input:
+Customer 1 has 9 pallets demand and window 0-24 at (-58.634322193, -43.358575012) and average unload time 0.121821465
+Customer 2 has 12 pallets demand and window 23-24 at (28.965174594, -99.089389917) and average unload time 0.087654688
+Customer 3 has 3 pallets demand and window 7-8 at (-4.207817631, 55.375286696) and average unload time 0.070791657
+Customer 4 has 9 pallets demand and window 14-15 at (-95.575728403, -23.126323868) and average unload time 0.125000116
+Customer 5 has 18 pallets demand and window 17-18 at (-46.022841903, -11.976898571) and average unload time 0.052855198
+Customer 6 has 4 pallets demand and window 0-24 at (53.595990864, 63.357449718) and average unload time 0.123359515
+Vehicle SP1 is a 8 metre with capacity 22, distance cost 0.993960098, and time cost 13.626030887
+Vehicle SP2 is a 11 metre with capacity 30, distance cost 0.843477047, and time cost 7.075587612
+Vehicle SP3 is a 8 metre with capacity 22, distance cost 0.993960098, and time cost 13.626030887
+Vehicle SP4 is a Rigid with capacity 16, distance cost 1.156048484, and time cost 7.073788064
+Vehicle SP5 is a Rigid with capacity 16, distance cost 1.156048484, and time cost 7.073788064
+
+Output:
+Vehicle SP1 travels from Depot to 5 to deliver 18 pallets. Expected unload start time is 17
+Vehicle SP1 travels from 5 to DepotReturn to deliver 0 pallets. Expected unload start time is 18.545840273
+Vehicle SP2 travels from Depot to 4 to deliver 9 pallets. Expected unload start time is 15
+Vehicle SP2 travels from 1 to 2 to deliver 12 pallets. Expected unload start time is 23
+Vehicle SP2 travels from 2 to DepotReturn to deliver 0 pallets. Expected unload start time is 25.342307277
+Vehicle SP2 travels from 4 to 1 to deliver 9 pallets. Expected unload start time is 16.65148874
+Vehicle SP3 travels from Depot to 3 to deliver 3 pallets. Expected unload start time is 8
+Vehicle SP3 travels from 3 to 6 to deliver 4 pallets. Expected unload start time is 8.941779179
+Vehicle SP3 travels from 6 to DepotReturn to deliver 0 pallets. Expected unload start time is 10.472543781
+
+Objective value: 737.529804375
+Solve time: 837"	
